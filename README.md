@@ -15,6 +15,9 @@ STM32F4 – Interner Temperatursensor
     - Quelle: Datasheet S. 164
   - V_SENSE = ADC_Wert * (V_REF / 4095)
 
+Für Umrechnung: Was ist VREF? Woher kommt der Wert?
+
+
 - Sampling-Time:
   - Empfohlen ≥ 480 ADC-Zyklen
   - Formel: t_Abtast = ADC_Zyklen / f_ADCCLK
