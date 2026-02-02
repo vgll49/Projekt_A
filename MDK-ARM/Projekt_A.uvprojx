@@ -413,7 +413,7 @@
             <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Downloads\Uebung 5\Uebung 5\uebungen\Uebung 5_1\ADC_Temp\Src\debug.c</FilePath>
+              <FilePath>..\Core\Src\debug.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -571,5 +571,14 @@
     </components>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>Projekt_A</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

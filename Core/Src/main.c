@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "debug.h"
+#include <stdbool.h>
 
 
 /* Private includes ----------------------------------------------------------*/
@@ -28,7 +29,10 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+float lastMeasuredTemp;
+float criticalTemp = 30.0f;
+float watchDogThreshhold = 25.0f;
+bool simulateHang = false;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -67,16 +71,49 @@ static void MX_TIM3_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_14); // TODO: call ADC_Reading 
-	if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) {
-		uint32_t tempAnalogValue = HAL_ADC_GetValue(&hadc1);
-		
-		
-	}
-	printf("HAL ADC Val is \n");
+void getResetReason() {
+    if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST)) {
+        printf("WATCHDOG RESET: HÄNGER BEI WENIG LAST!\r\n");
+    }
+    if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST)) {
+        printf("RESET durch externen Reset-Pin (NRST)!\r\n");
+    }
+    if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST)) {
+        printf("Power-On-Reset!\r\n");
+    }
+    if (__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST)) {
+        printf("Software-Reset!\r\n");
+    }
+    // Flags nach Auswertung zurücksetzen
+    __HAL_RCC_CLEAR_RESET_FLAGS();
 }
 
+// Timer Callback
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	//printf("Hello Timer Interrupt \n");
+	if(htim->Instance == TIM3){
+		//HAL_ADC_Start_IT(&hadc1);
+		//printf("Last Measured TEMP IS %.2f\n", lastMeasuredTemp);
+		//printf("Critical TEMP IS %.2f\n", criticalTemp);
+		if (lastMeasuredTemp > criticalTemp) {
+
+			HAL_GPIO_WritePin(GPIOG, GPIO_PIN_14, GPIO_PIN_SET);
+		} else {
+			HAL_GPIO_WritePin(GPIOG, GPIO_PIN_14, GPIO_PIN_RESET);
+		}
+	}
+}
+
+// ADC Callback
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) // EOC Callback
+{
+	uint32_t val = HAL_ADC_GetValue(hadc);
+	float temp = 31.0f; // TODO: später call convert to temp
+	//printf("Temperature is Value is %.2f\n", temp);
+	
+	
+	lastMeasuredTemp = temp;
+}
 /* USER CODE END 0 */
 
 /**
@@ -87,7 +124,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	printf("HELLO WORLD");
+	//printf("HELLO WORLD");
 
   /* USER CODE END 1 */
 
@@ -95,9 +132,9 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
+	printf("HAL INIT\n");
   /* USER CODE BEGIN Init */
-
+	getResetReason();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -114,18 +151,23 @@ int main(void)
   MX_LTDC_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+	HAL_ADC_Start_IT(&hadc1);
 	HAL_TIM_Base_Start_IT(&htim3); // Starts timer in interrupt mode TODO: Add error handling later
-	HAL_ADC_Start_IT(&hadc1); // Starts ADC in interrupt mode, IT for EOC trigger TODO: Add Error Handling later
+	//HAL_ADC_Start_IT(&hadc1); // Starts ADC in interrupt mode, IT for EOC trigger TODO: Add Error Handling later
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		printf("Hello SWV!\n");
-
     /* USER CODE END WHILE */
-
+		//printf("Hello while!\n");
+		
+		simulateHang = (lastMeasuredTemp < watchDogThreshhold);
+		
+		if (!simulateHang) { 
+			HAL_IWDG_Refresh(&hiwdg); 
+		}
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
