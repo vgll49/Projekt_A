@@ -48,6 +48,10 @@ LTDC_HandleTypeDef hltdc;
 
 TIM_HandleTypeDef htim3;
 
+// Consts for testing
+float const temp_low = 15.00;
+float const temp_high = 30.00;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -65,6 +69,9 @@ static void MX_TIM3_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_14); // TODO: call ADC_Reading 
+}
 
 /* USER CODE END 0 */
 
@@ -102,14 +109,14 @@ int main(void)
   MX_LTDC_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-
+ HAL_TIM_Base_Start_IT(&htim3); //Starts timer in interrupt mode 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_14);
+		//HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_14);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
