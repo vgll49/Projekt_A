@@ -3,6 +3,7 @@
 "projekt_a\main.o"
 "projekt_a\stm32f4xx_it.o"
 "projekt_a\stm32f4xx_hal_msp.o"
+"projekt_a\debug.o"
 "projekt_a\stm32f4xx_hal_adc.o"
 "projekt_a\stm32f4xx_hal_adc_ex.o"
 "projekt_a\stm32f4xx_hal_rcc.o"

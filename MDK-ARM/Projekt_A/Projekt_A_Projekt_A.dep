@@ -1,7 +1,7 @@
 Dependencies for Project 'Projekt_A', Target 'Projekt_A': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARM_Compiler_5.06u7
-F (startup_stm32f429xx.s)(0x697F95D1)(--cpu Cortex-M4.fp.sp --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_Projekt_A-IC:\Users\gival1\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include--pd "__UVISION_VERSION SETA 543" --pd "STM32F429xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f429xx.lst --xref -o projekt_a\startup_stm32f429xx.o --depend projekt_a\startup_stm32f429xx.d)
-F (../Core/Src/main.c)(0x69807414)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Projekt_A-IC:\Users\gival1\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F429xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F429xx-o projekt_a\main.o --omf_browse projekt_a\main.crf --depend projekt_a\main.d)
+F (startup_stm32f429xx.s)(0x69808CB8)(--cpu Cortex-M4.fp.sp --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_Projekt_A-IC:\Users\gival1\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include--pd "__UVISION_VERSION SETA 543" --pd "STM32F429xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f429xx.lst --xref -o projekt_a\startup_stm32f429xx.o --depend projekt_a\startup_stm32f429xx.d)
+F (../Core/Src/main.c)(0x6980A9C4)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Projekt_A-IC:\Users\gival1\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F429xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F429xx-o projekt_a\main.o --omf_browse projekt_a\main.crf --depend projekt_a\main.d)
 I (../Core/Inc/main.h)(0x697F95CE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x692F08BC)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x697F95CE)
@@ -38,6 +38,9 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x692F08BC)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x692F08BC)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x692F08BC)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x692F08BC)
+I (../Core/Inc/debug.h)(0x69412A42)
+I (C:\Users\gival1\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\include\string.h)(0x5E8E9F32)
+I (C:\Users\gival1\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stdio.h)(0x5E8E9F32)
 F (../Core/Src/stm32f4xx_it.c)(0x697F95CE)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Projekt_A-IC:\Users\gival1\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F429xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F429xx-o projekt_a\stm32f4xx_it.o --omf_browse projekt_a\stm32f4xx_it.crf --depend projekt_a\stm32f4xx_it.d)
 I (../Core/Inc/main.h)(0x697F95CE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x692F08BC)
@@ -113,6 +116,10 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x692F08BC)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x692F08BC)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x692F08BC)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x692F08BC)
+F (..\..\..\..\Downloads\Uebung 5\Uebung 5\uebungen\Uebung 5_1\ADC_Temp\Src\debug.c)(0x69412A45)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Projekt_A-IC:\Users\gival1\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F429xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F429xx-o projekt_a\debug.o --omf_browse projekt_a\debug.crf --depend projekt_a\debug.d)
+I (../Core/Inc/debug.h)(0x69412A42)
+I (C:\Users\gival1\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\include\string.h)(0x5E8E9F32)
+I (C:\Users\gival1\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stdio.h)(0x5E8E9F32)
 F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c)(0x692F08BC)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_Projekt_A-IC:\Users\gival1\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F429xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F429xx-o projekt_a\stm32f4xx_hal_adc.o --omf_browse projekt_a\stm32f4xx_hal_adc.crf --depend projekt_a\stm32f4xx_hal_adc.d)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x692F08BC)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x697F95CE)
