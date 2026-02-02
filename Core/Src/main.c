@@ -33,6 +33,7 @@ float lastMeasuredTemp;
 float criticalTemp = 30.0f;
 float watchDogThreshhold = 25.0f;
 bool simulateHang = false;
+uint8_t ledOn = 0;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -88,6 +89,21 @@ void getResetReason() {
     __HAL_RCC_CLEAR_RESET_FLAGS();
 }
 
+
+void checkCriticalTemperature(float temp) {
+    if (temp > criticalTemp) {
+        if (!ledOn) {                 // nur wenn LED noch aus
+            HAL_GPIO_WritePin(GPIOG, GPIO_PIN_14, GPIO_PIN_SET);
+            ledOn = 1;                // Zustand merken
+        }
+    } else {
+        if (ledOn) {                  // nur wenn LED noch an
+            HAL_GPIO_WritePin(GPIOG, GPIO_PIN_14, GPIO_PIN_RESET);
+            ledOn = 0;                // Zustand merken
+        }
+    }
+}
+
 // Timer Callback
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	//printf("Hello Timer Interrupt \n");
@@ -95,12 +111,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		//HAL_ADC_Start_IT(&hadc1);
 		//printf("Last Measured TEMP IS %.2f\n", lastMeasuredTemp);
 		//printf("Critical TEMP IS %.2f\n", criticalTemp);
-		if (lastMeasuredTemp > criticalTemp) {
-
-			HAL_GPIO_WritePin(GPIOG, GPIO_PIN_14, GPIO_PIN_SET);
-		} else {
-			HAL_GPIO_WritePin(GPIOG, GPIO_PIN_14, GPIO_PIN_RESET);
-		}
+		checkCriticalTemperature(lastMeasuredTemp);
 	}
 }
 
