@@ -415,6 +415,21 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Src\debug.c</FilePath>
             </File>
+            <File>
+              <FileName>temperature.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\temperature.c</FilePath>
+            </File>
+            <File>
+              <FileName>watchdog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\watchdog.c</FilePath>
+            </File>
+            <File>
+              <FileName>reset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\reset.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

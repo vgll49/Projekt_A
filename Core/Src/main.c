@@ -19,8 +19,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "debug.h"
-#include <stdbool.h>
-
+#include "temperature.h"
+#include "watchdog.h"
+#include "reset.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -29,11 +30,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-float lastMeasuredTemp;
-float criticalTemp = 30.0f;
-float watchDogThreshhold = 25.0f;
-bool simulateHang = false;
-uint8_t ledOn = 0;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -72,58 +69,10 @@ static void MX_TIM3_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void getResetReason() {
-    if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST)) {
-        printf("WATCHDOG RESET: HÄNGER BEI WENIG LAST!\r\n");
-    }
-    if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST)) {
-        printf("RESET durch externen Reset-Pin (NRST)!\r\n");
-    }
-    if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST)) {
-        printf("Power-On-Reset!\r\n");
-    }
-    if (__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST)) {
-        printf("Software-Reset!\r\n");
-    }
-    // Flags nach Auswertung zurücksetzen
-    __HAL_RCC_CLEAR_RESET_FLAGS();
-}
-
-
-void checkCriticalTemperature(float temp) {
-    if (temp > criticalTemp) {
-        if (!ledOn) {                 // nur wenn LED noch aus
-            HAL_GPIO_WritePin(GPIOG, GPIO_PIN_14, GPIO_PIN_SET);
-            ledOn = 1;                // Zustand merken
-        }
-    } else {
-        if (ledOn) {                  // nur wenn LED noch an
-            HAL_GPIO_WritePin(GPIOG, GPIO_PIN_14, GPIO_PIN_RESET);
-            ledOn = 0;                // Zustand merken
-        }
-    }
-}
-
-// Timer Callback
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	//printf("Hello Timer Interrupt \n");
-	if(htim->Instance == TIM3){
-		//HAL_ADC_Start_IT(&hadc1);
-		//printf("Last Measured TEMP IS %.2f\n", lastMeasuredTemp);
-		//printf("Critical TEMP IS %.2f\n", criticalTemp);
-		checkCriticalTemperature(lastMeasuredTemp);
-	}
-}
-
-// ADC Callback
+// ADC Callback, wird nach jedem Timer-Update-Event
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) // EOC Callback
 {
-	uint32_t val = HAL_ADC_GetValue(hadc);
-	float temp = 31.0f; // TODO: später call convert to temp
-	//printf("Temperature is Value is %.2f\n", temp);
-	
-	
-	lastMeasuredTemp = temp;
+	temperatureCallback(hadc);
 }
 /* USER CODE END 0 */
 
@@ -145,7 +94,6 @@ int main(void)
   HAL_Init();
 	printf("HAL INIT\n");
   /* USER CODE BEGIN Init */
-	getResetReason();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -158,13 +106,14 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC1_Init();
-  MX_IWDG_Init();
   MX_LTDC_Init();
   MX_TIM3_Init();
+	MX_IWDG_Init();
+	
   /* USER CODE BEGIN 2 */
-	HAL_ADC_Start_IT(&hadc1);
-	HAL_TIM_Base_Start_IT(&htim3); // Starts timer in interrupt mode TODO: Add error handling later
-	//HAL_ADC_Start_IT(&hadc1); // Starts ADC in interrupt mode, IT for EOC trigger TODO: Add Error Handling later
+	getResetReason();          // reset module
+	HAL_ADC_Start_IT(&hadc1); // ADC mit Interrupt starten
+	HAL_TIM_Base_Start_IT(&htim3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -172,13 +121,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		//printf("Hello while!\n");
-		
-		simulateHang = (lastMeasuredTemp < watchDogThreshhold);
-		
-		if (!simulateHang) { 
-			HAL_IWDG_Refresh(&hiwdg); 
-		}
+		handleWatchdog(&hiwdg, lastMeasuredTemp, adcHasRun);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -261,8 +204,8 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ScanConvMode = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING; // Hört auf externen trigger
+  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T3_TRGO; // Timer 3
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DMAContinuousRequests = DISABLE;
@@ -416,9 +359,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler =  889; //0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 65535;
+  htim3.Init.Period =  9999; //65535;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -430,7 +373,7 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE; // Timer-Update löst ADC aus
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
   {

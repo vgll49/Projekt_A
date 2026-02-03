@@ -39,4 +39,7 @@ projekt_a\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 projekt_a\main.o: ../Core/Inc/debug.h
 projekt_a\main.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\string.h
 projekt_a\main.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdio.h
+projekt_a\main.o: ../Core/Inc/temperature.h
 projekt_a\main.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdbool.h
+projekt_a\main.o: ../Core/Inc/watchdog.h
+projekt_a\main.o: ../Core/Inc/reset.h
