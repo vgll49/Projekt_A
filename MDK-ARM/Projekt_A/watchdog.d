@@ -1,4 +1,4 @@
-projekt_a\watchdog.o: watchdog.c
+projekt_a\watchdog.o: ..\Core\Src\watchdog.c
 projekt_a\watchdog.o: ../Core/Inc/watchdog.h
 projekt_a\watchdog.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 projekt_a\watchdog.o: ../Core/Inc/stm32f4xx_hal_conf.h

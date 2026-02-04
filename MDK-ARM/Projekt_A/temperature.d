@@ -1,4 +1,4 @@
-projekt_a\temperature.o: temperature.c
+projekt_a\temperature.o: ..\Core\Src\temperature.c
 projekt_a\temperature.o: ../Core/Inc/temperature.h
 projekt_a\temperature.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 projekt_a\temperature.o: ../Core/Inc/stm32f4xx_hal_conf.h

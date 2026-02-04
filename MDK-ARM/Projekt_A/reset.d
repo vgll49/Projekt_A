@@ -1,4 +1,4 @@
-projekt_a\reset.o: reset.c
+projekt_a\reset.o: ..\Core\Src\reset.c
 projekt_a\reset.o: ../Core/Inc/reset.h
 projekt_a\reset.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 projekt_a\reset.o: ../Core/Inc/stm32f4xx_hal_conf.h
