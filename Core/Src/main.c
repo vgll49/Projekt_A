@@ -69,8 +69,8 @@ static void MX_TIM3_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// ADC Callback, wird nach jedem Timer-Update-Event
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) // EOC Callback
+// ADC Callback, wird nach jeder EOC getriggered
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) 
 {
 	temperatureCallback(hadc);
 }
@@ -84,7 +84,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	//printf("HELLO WORLD");
 
   /* USER CODE END 1 */
 
@@ -111,8 +110,8 @@ int main(void)
 	MX_IWDG_Init();
 	
   /* USER CODE BEGIN 2 */
-	getResetReason();          // reset module
-	HAL_ADC_Start_IT(&hadc1); // ADC mit Interrupt starten
+	getResetReason();          
+	HAL_ADC_Start_IT(&hadc1); 
 	HAL_TIM_Base_Start_IT(&htim3);
   /* USER CODE END 2 */
 
@@ -199,7 +198,7 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2; // APB2 Takt / 2 = 8mHz
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.ScanConvMode = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
@@ -219,7 +218,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
   sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES; 
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -359,9 +358,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler =  889; //0;
+  htim3.Init.Prescaler =  159; 
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period =  9999; //65535;
+  htim3.Init.Period =  9999; //65535 is max, 16 bit
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)

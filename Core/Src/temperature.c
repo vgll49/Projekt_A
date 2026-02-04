@@ -36,7 +36,10 @@ void temperatureCallback(ADC_HandleTypeDef *hadc) {
     uint32_t analogValue = HAL_ADC_GetValue(hadc);
     float temp = convertAnalogToCelsius(analogValue);
     lastMeasuredTemp = temp;
+	
     checkCriticalTemperature(temp);
+	
+		// Flag für Watchdog
     adcHasRun = true;
 
     printf("ADC: %d -> %.2f °C\n", analogValue, temp);
