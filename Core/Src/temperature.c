@@ -1,12 +1,23 @@
 #include "temperature.h"
 #include "stm32f4xx_hal.h"
 #include <stdio.h>
+#include "stm32f429i_discovery_lcd.h"
 
 // Globale Variablen
 float lastMeasuredTemp = 0;
 float criticalTemp = 30.0f;
 uint8_t ledOn = 0;
 bool adcHasRun = false;
+
+void displayTemperature(float temp)
+{
+    char buf[20];
+    snprintf(buf, sizeof(buf), "%.2f C", temp);
+    BSP_LCD_Clear(LCD_COLOR_BLACK);
+    BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
+    BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
+    BSP_LCD_DisplayStringAt(0, 140, (uint8_t*)buf, CENTER_MODE);
+}
 
 float convertAnalogToCelsius(uint32_t adc_value) {
     const float VREF = 3.0f;
@@ -42,5 +53,7 @@ void temperatureCallback(ADC_HandleTypeDef *hadc) {
 		// Flag für Watchdog
     adcHasRun = true;
 
+	
+    displayTemperature(temp);
     printf("ADC: %d -> %.2f °C\n", analogValue, temp);
 }

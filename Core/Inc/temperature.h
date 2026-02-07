@@ -9,9 +9,11 @@ extern float criticalTemp;
 extern uint8_t ledOn;
 extern bool adcHasRun;
 
+
 void temperatureInit(ADC_HandleTypeDef* hadc);
 float convertAnalogToCelsius(uint32_t adc_value);
 void checkCriticalTemperature(float temp);
 void temperatureCallback(ADC_HandleTypeDef *hadc);
+
 
 #endif // TEMPERATURE_H
