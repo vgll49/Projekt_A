@@ -93,7 +93,6 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
   /* USER CODE BEGIN Init */
   /* USER CODE END Init */
 
@@ -107,14 +106,13 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC1_Init();
-  MX_IWDG_Init();
   MX_TIM3_Init();
 	
   /* USER CODE BEGIN 2 */
-	getResetReason();          
+	getResetReason(); 
 	HAL_ADC_Start_IT(&hadc1); 
 	HAL_TIM_Base_Start_IT(&htim3);
-	
+	MX_IWDG_Init();
 	BSP_LCD_Init();
 
 	BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);

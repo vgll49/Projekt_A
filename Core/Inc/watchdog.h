@@ -7,7 +7,6 @@
 extern float watchDogThreshhold;
 extern bool simulateHang;
 
-void watchdogInit(IWDG_HandleTypeDef *hiwdg);
 void handleWatchdog(IWDG_HandleTypeDef *hiwdg, float lastMeasuredTemp, bool adcHasRun);
 
 #endif // WATCHDOG_H
