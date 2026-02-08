@@ -109,6 +109,7 @@ int main(void)
   MX_ADC1_Init();
   MX_IWDG_Init();
   MX_TIM3_Init();
+	
   /* USER CODE BEGIN 2 */
 	getResetReason();          
 	HAL_ADC_Start_IT(&hadc1); 
@@ -119,13 +120,12 @@ int main(void)
 	BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
 	BSP_LCD_SelectLayer(0);
 
-	// set full window for the layer
+	// Gesamter Screen für das Layer
 	BSP_LCD_SetLayerWindow(0, 0, 0, 240, 320);
-
-	
-
-
+	// einmalig Hintergrund auf schwarz setzen
+	BSP_LCD_Clear(LCD_COLOR_BLACK);
   /* USER CODE END 2 */
+
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -206,7 +206,7 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8; // 42 mHz //
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8; // 42 mHz 
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.ScanConvMode = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;

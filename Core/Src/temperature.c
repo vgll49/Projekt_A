@@ -2,6 +2,11 @@
 #include "stm32f4xx_hal.h"
 #include <stdio.h>
 #include "stm32f429i_discovery_lcd.h"
+#define TEMP_X       0      // X-Position des Textes
+#define TEMP_Y       140    // Y-Position
+#define TEMP_WIDTH   240    // Breite des Rechtecks zum Löschen
+#define TEMP_HEIGHT  20     // Höhe des Rechtecks zum Löschen (Textgröße anpassen)
+
 
 // Globale Variablen
 float lastMeasuredTemp = 0;
@@ -13,10 +18,17 @@ void displayTemperature(float temp)
 {
     char buf[20];
     snprintf(buf, sizeof(buf), "%.2f C", temp);
-    BSP_LCD_Clear(LCD_COLOR_BLACK);
-    BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
+
+    // Alten Textbereich löschen (mit Hintergrundfarbe)
+    BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+    BSP_LCD_FillRect(TEMP_X, TEMP_Y, TEMP_WIDTH, TEMP_HEIGHT);
+
+    // Textfarbe wieder weiß setzen
     BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
-    BSP_LCD_DisplayStringAt(0, 140, (uint8_t*)buf, CENTER_MODE);
+    BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
+
+    // neuen Text zeichnen
+    BSP_LCD_DisplayStringAt(TEMP_X, TEMP_Y, (uint8_t*)buf, CENTER_MODE);
 }
 
 float convertAnalogToCelsius(uint32_t adc_value) {
@@ -42,7 +54,7 @@ void checkCriticalTemperature(float temp) {
     }
 }
 
-// ADC Callback
+// für ADC Callback
 void temperatureCallback(ADC_HandleTypeDef *hadc) {
     uint32_t analogValue = HAL_ADC_GetValue(hadc);
     float temp = convertAnalogToCelsius(analogValue);
@@ -50,7 +62,7 @@ void temperatureCallback(ADC_HandleTypeDef *hadc) {
 	
     checkCriticalTemperature(temp);
 	
-		// Flag für Watchdog
+		// flag für Watchdog
     adcHasRun = true;
 
 	
