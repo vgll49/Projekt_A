@@ -108,7 +108,6 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   MX_IWDG_Init();
-  //MX_LTDC_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 	getResetReason();          
@@ -222,6 +221,9 @@ static void MX_ADC1_Init(void)
   {
     Error_Handler();
   }
+	
+	 ADC->CCR |= ADC_CCR_TSVREFE; /*!<Temperature Sensor and VREFINT Enable */
+
 
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
