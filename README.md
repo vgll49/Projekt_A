@@ -10,7 +10,7 @@ It demonstrates the use of common microcontroller peripherals such as timers, AD
 - Internal temperature sensor via ADC
 - Timer-based ADC triggering (TIM3 → TRGO)
 - Interrupt-driven data processing (ADC callback)
-- Independent Watchdog (IWDG) for system supervision
+- Independent Watchdog (IWDG) 
 - GPIO control (LED for critical temperature)
 - LCD output (live temperature display)
 - Reset reason detection (watchdog / power / software reset)
@@ -24,7 +24,7 @@ It demonstrates the use of common microcontroller peripherals such as timers, AD
 - Temperature values are converted and displayed on an LCD
 - If a threshold is exceeded, an LED is activated
 - A watchdog monitors system activity:
-  - If no valid ADC updates occur, the watchdog is not refreshed → system reset
+  - If no valid ADC updates occur, the watchdog is not refreshed -> system reset
 - After reset, the cause is printed for debugging purposes
 
 ---
@@ -40,7 +40,7 @@ The goal of this project is to apply core embedded systems concepts:
 
 ---
 
-## 🧰 Hardware
+## Hardware
 
 - STM32F429 Discovery Board
 
